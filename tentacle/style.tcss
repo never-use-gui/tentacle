@@ -31,7 +31,7 @@ Header {
 }
 
 #sidebar {
-    width: 25%;
+    width: 20%;
     height: 1fr;
     border: solid #6c7086;
     background: transparent;
@@ -47,7 +47,7 @@ Header {
 }
 
 #status-panel {
-    width: 25%;
+    width: 30%;
     height: 1fr;
     border: solid #6c7086;
     background: transparent;
@@ -56,15 +56,32 @@ Header {
     scrollbar-color: #9399b2;
 }
 
-#unstaged-panel, #staged-panel {
-    height: 33%;
+/* Status tabs container */
+#status-tabs {
+    height: 1fr;
     background: transparent;
 }
 
-#commit-section {
-    height: 33%;
+#unstaged-tab, #staged-tab {
     background: transparent;
 }
+
+#unstaged-tab > VerticalScroll, #staged-tab > VerticalScroll {
+    height: 1fr;
+    background: transparent;
+    overflow-y: auto;
+    scrollbar-size: 1 1;
+    scrollbar-color: #9399b2;
+}
+
+.hint {
+    color: #9399b2;
+    text-style: italic;
+    padding: 0 1;
+    margin: 0 0 1 0;
+}
+
+
 
 #unstaged-tree, #staged-tree {
     height: 1fr;
@@ -98,17 +115,11 @@ Header {
     overflow-y: auto;
 }
 
-/* Commit section styling */
-.commit-section {
-    layout: vertical;
-    width: 100%;
-    border-top: solid #6c7086;
-    padding: 1;
-}
+
 
 .commit-input {
     width: 100%;
-    height: 3;
+    height: 6;
     border: solid #6c7086;
     background: transparent;
     padding: 0 1;
@@ -199,7 +210,7 @@ Header {
     margin: 0 0 0 1;
     text-style: bold;
     width: 8;
-    height: 3;
+    height: 6;
 }
 
 .gac-button:hover {
@@ -209,11 +220,11 @@ Header {
 /* Commit message row layout */
 .commit-message-row {
     width: 100%;
-    height: 3;
+    height: 6;
     margin: 0 0 1 0;
 }
 
-/* Commit Section Styles */
+/* Commit Section Styles - Now in center panel tab */
 .commit-label {
     margin: 0 0 0 0;
     color: #bb9af7;
@@ -226,7 +237,7 @@ Header {
     border: solid #6c7086;
     background: transparent;
     color: white;
-    height: 3;
+    height: 6;
 }
 
 .commit-body {
@@ -234,8 +245,8 @@ Header {
     border: solid #6c7086;
     background: transparent;
     color: white;
-    height: 6;
-    min-height: 6;
+    height: 20;
+    min-height: 15;
     width: 100%;
     padding: 1;
 }
@@ -245,6 +256,7 @@ Header {
     background: #bb9af7;
     color: white;
     text-style: bold;
+    width: 100%;
 }
 
 .commit-button:hover {
@@ -252,8 +264,10 @@ Header {
 }
 
 .commit-section {
-    padding: 1;
-    border-top: solid #6c7086;
+    padding: 2;
+    height: 1fr;
+    layout: vertical;
+    overflow-y: auto;
 }
 
 

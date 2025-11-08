@@ -7,7 +7,8 @@ from textual.containers import Horizontal, Vertical, Container, VerticalScroll
 from textual.widgets.tree import TreeNode
 from tentacle.git_status_sidebar import GitStatusSidebar, Hunk
 from tentacle.animated_logo import AnimatedLogo
-from tentacle.gac_integration import GACConfigModal, GACIntegration
+from tentacle.gac_integration import GACIntegration
+from tentacle.gac_config_modal import GACConfigModal
 from tentacle.diff_markdown import DiffMarkdown, DiffMarkdownConfig
 from textual.widget import Widget
 from textual.screen import ModalScreen
@@ -28,15 +29,46 @@ class CommitLine(Static):
 
 
 class GitDiffHistoryTabs(Widget):
-    """A widget that contains tabbed diff view and commit history."""
+    """A widget that contains tabbed diff view, commit history, and commit message."""
     
     def compose(self) -> ComposeResult:
-        """Create the tabbed content with diff view and commit history tabs."""
+        """Create the tabbed content with diff view, commit history, and commit message tabs."""
         with TabbedContent():
             with TabPane("Diff View"):
                 yield VerticalScroll(id="diff-content")
             with TabPane("Commit History"):
                 yield VerticalScroll(id="history-content")
+            with TabPane("Commit Message"):
+                yield Vertical(
+                    Label("Commit Message (Subject):", classes="commit-label"),
+                    Horizontal(
+                        Input(placeholder="Enter commit message...", id="commit-message", classes="commit-input"),
+                        Button("GAC", id="gac-button", classes="gac-button"),
+                        classes="commit-message-row"
+                    ),
+                    Label("Commit Details (Body):", classes="commit-label"),
+                    TextArea(placeholder="Enter detailed description (optional)...", id="commit-body", classes="commit-body"),
+                    Button("Commit", id="commit-button", classes="commit-button"),
+                    id="commit-section",
+                    classes="commit-section"
+                )
+
+
+class GitStatusTabs(Widget):
+    """A widget that contains tabbed unstaged and staged changes."""
+    
+    def compose(self) -> ComposeResult:
+        """Create the tabbed content with unstaged and staged changes tabs."""
+        with TabbedContent(id="status-tabs"):
+            with TabPane("Unstaged Changes", id="unstaged-tab"):
+                yield VerticalScroll(
+                    Static("Hint: Select a file and press 's' to stage the entire file", classes="hint"),
+                    Tree("Unstaged", id="unstaged-tree"),
+                )
+            with TabPane("Staged Changes", id="staged-tab"):
+                yield VerticalScroll(
+                    Tree("Staged", id="staged-tree"),
+                )
 
 
 
@@ -110,9 +142,13 @@ class HelpModal(ModalScreen):
 [help-key]Enter[/help-key]         Select file to view diff
 [help-key]Tab[/help-key]           Navigate through UI elements (Shift+Tab to go backwards)
 
+[help-section-title]📑 Tab Navigation[/help-section-title]
+[help-key]1 or Ctrl+1[/help-key]  Switch to Unstaged Changes tab
+[help-key]2 or Ctrl+2[/help-key]  Switch to Staged Changes tab
+
 [help-section-title]🔄 Git Operations[/help-section-title]
-[help-key]s[/help-key]             Stage selected file
-[help-key]u[/help-key]             Unstage selected file
+[help-key]s[/help-key]             Stage selected file (works from any tab)
+[help-key]u[/help-key]             Unstage selected file (works from any tab)
 [help-key]a[/help-key]             Stage ALL unstaged changes
 [help-key]x[/help-key]             Unstage ALL staged changes
 [help-key]c[/help-key]             Commit staged changes
@@ -126,13 +162,21 @@ class HelpModal(ModalScreen):
 [help-key]o[/help-key]                Pull latest changes
 
 [help-section-title]🤖 AI Integration (GAC)[/help-section-title]
-[help-key]Ctrl+G[/help-key]        Configure GAC (Git Commit Assistant)
+[help-key]Ctrl+G[/help-key]        Configure GAC (21+ providers supported)
 [help-key]g[/help-key]                Generate commit message with AI
+
+GAC supports OpenAI, Anthropic, Gemini, Mistral, Cohere, DeepSeek,
+Groq, Together, Cerebras, OpenRouter, xAI, Ollama, and more!
 
 [help-section-title]⚙️ Application[/help-section-title]
 [help-key]h[/help-key]             Show this help modal
 [help-key]r[/help-key]             Refresh git status and file tree
 [help-key]q[/help-key]             Quit application
+
+[help-section-title]💡 UI Layout[/help-section-title]
+The right panel uses a tabbed layout for Unstaged and Staged changes.
+Use the shortcuts above to quickly switch between tabs, or click them.
+Staging/unstaging operations work from either tab.
         """
         return Static(help_text)
     
@@ -257,6 +301,10 @@ class GitDiffViewer(App):
         ("u", "unstage_selected_file", "Unstage Selected File"),
         ("p", "push_changes", "Push"),
         ("o", "pull_changes", "Pull"),
+        ("1", "switch_to_unstaged", "Switch to Unstaged Tab"),
+        ("2", "switch_to_staged", "Switch to Staged Tab"),
+        ("ctrl+1", "switch_to_unstaged", "Switch to Unstaged Tab"),
+        ("ctrl+2", "switch_to_staged", "Switch to Staged Tab"),
     ]
     
     def __init__(self, repo_path: str = None):
@@ -291,33 +339,8 @@ class GitDiffViewer(App):
             ),
             # Right panel - Git status functionality
             Vertical(
-                # Top pane - Unstaged changes
-                Vertical(
-                    Static("Unstaged Changes", classes="panel-header"),
-                    Static("Hint: Select a file and press 's' to stage the entire file", classes="hint"),
-                    Tree("Unstaged", id="unstaged-tree"),
-                    id="unstaged-panel"
-                ),
-                # Middle pane - Staged changes
-                Vertical(
-                    Static("Staged Changes", classes="panel-header"),
-                    Tree("Staged", id="staged-tree"),
-                    id="staged-panel"
-                ),
-                # Bottom pane - Commit functionality
-                Vertical(
-                    Label("Commit Message (Subject):", classes="commit-label"),
-                    Horizontal(
-                        Input(placeholder="Enter commit message...", id="commit-message", classes="commit-input"),
-                        Button("GAC", id="gac-button", classes="gac-button"),
-                        classes="commit-message-row"
-                    ),
-                    Label("Commit Details (Body):", classes="commit-label"),
-                    TextArea(placeholder="Enter detailed description (optional)...", id="commit-body", classes="commit-body"),
-                    Button("Commit", id="commit-button", classes="commit-button"),
-                    id="commit-section",
-                    classes="commit-section"
-                ),
+                # Tabbed content for Unstaged/Staged changes
+                GitStatusTabs(),
                 id="status-panel"
             ),
             id="main-content"
@@ -386,8 +409,6 @@ class GitDiffViewer(App):
         # Also refresh the diff view if a file is currently selected
         if self.current_file:
             self.display_file_diff(self.current_file, self.current_is_staged, force_refresh=True)
-        
-        self.notify("All git statuses refreshed", severity="information")
         
     def action_quit(self) -> None:
         """Quit the application with a message."""
@@ -550,8 +571,6 @@ class GitDiffViewer(App):
         # Also refresh the diff view if a file is currently selected
         if self.current_file:
             self.display_file_diff(self.current_file, self.current_is_staged, force_refresh=True)
-        
-        self.notify("All git statuses refreshed", severity="information")
         
     def populate_file_tree(self) -> None:
         """Populate the file tree sidebar with all files and their git status."""
@@ -754,8 +773,6 @@ class GitDiffViewer(App):
             success = self.git_sidebar.stage_hunk(file_path, hunk_index)
             
             if success:
-                self.notify(f"Staged hunk in {file_path}", severity="information")
-                
                 # Clear any cached diff state
                 if hasattr(self, '_current_displayed_file'):
                     delattr(self, '_current_displayed_file')
@@ -784,7 +801,6 @@ class GitDiffViewer(App):
         try:
             success = self.git_sidebar.stage_file(file_path)
             if success:
-                self.notify(f"Staged all changes in {file_path}", severity="information")
                 # Refresh trees
                 # Refresh diff view for the staged file
                 self.display_file_diff(file_path, is_staged=True, force_refresh=True)
@@ -799,8 +815,6 @@ class GitDiffViewer(App):
             success = self.git_sidebar.unstage_hunk(file_path, hunk_index)
             
             if success:
-                self.notify(f"Unstaged hunk in {file_path}", severity="information")
-                
                 # Refresh tree states with latest git data
                 file_data = self.git_sidebar.collect_file_data()
                 self.populate_unstaged_changes(file_data)
@@ -824,8 +838,6 @@ class GitDiffViewer(App):
             success = self.git_sidebar.discard_hunk(file_path, hunk_index)
             
             if success:
-                self.notify(f"Discarded hunk in {file_path}", severity="information")
-                
                 # Clear any cached diff state
                 if hasattr(self, '_current_displayed_file'):
                     delattr(self, '_current_displayed_file')
@@ -1066,7 +1078,6 @@ class GitDiffViewer(App):
             # Perform the staging operation
             success = self.git_sidebar.stage_file(self.current_file)
             if success:
-                self.notify(f"Staged all changes in {self.current_file}", severity="information")
                 # Use the comprehensive refresh function
                 self.action_refresh_branches()
                 # Also refresh diff view for the staged file
@@ -1095,7 +1106,6 @@ class GitDiffViewer(App):
                 success = self.git_sidebar.unstage_file(self.current_file)
                 
             if success:
-                self.notify(f"Unstaged all changes in {self.current_file}", severity="information")
                 # Use the comprehensive refresh function
                 self.action_refresh_branches()
                 # Also refresh diff view to show unstaged changes
@@ -1119,7 +1129,6 @@ class GitDiffViewer(App):
         try:
             success, message = self.git_sidebar.stage_all_changes()
             if success:
-                self.notify(message, severity="information")
                 # Refresh UI
                 self.populate_file_tree()
                 if self.current_file:
@@ -1134,7 +1143,6 @@ class GitDiffViewer(App):
         try:
             success, message = self.git_sidebar.unstage_all_changes()
             if success:
-                self.notify(message, severity="information")
                 # Refresh UI
                 self.populate_file_tree()
                 if self.current_file:
@@ -1143,6 +1151,22 @@ class GitDiffViewer(App):
                 self.notify(message, severity="error")
         except Exception as e:
             self.notify(f"Error unstaging all changes: {e}", severity="error")
+
+    def action_switch_to_unstaged(self) -> None:
+        """Switch to the Unstaged Changes tab."""
+        try:
+            status_tabs = self.query_one("#status-tabs", TabbedContent)
+            status_tabs.active = "unstaged-tab"
+        except Exception as e:
+            self.notify(f"Error switching to unstaged tab: {e}", severity="error")
+
+    def action_switch_to_staged(self) -> None:
+        """Switch to the Staged Changes tab."""
+        try:
+            status_tabs = self.query_one("#status-tabs", TabbedContent)
+            status_tabs.active = "staged-tab"
+        except Exception as e:
+            self.notify(f"Error switching to staged tab: {e}", severity="error")
 
     def action_gac_generate(self) -> None:
         """Generate commit message using GAC and populate the commit message fields (no auto-commit)."""

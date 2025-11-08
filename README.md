@@ -8,6 +8,8 @@ A powerful Textual-based TUI (Terminal User Interface) for viewing and managing 
 - `↑/↓` - Navigate through files and hunks
 - `Enter` - Select file to view diff
 - `Tab` - Navigate through UI elements (use `Shift+Tab` to go backwards)
+- `1` or `Ctrl+1` - Switch to **Unstaged Changes** tab
+- `2` or `Ctrl+2` - Switch to **Staged Changes** tab
 
 ### 🔄 Git Operations
 - `s` - Stage selected file
@@ -36,7 +38,8 @@ A powerful Textual-based TUI (Terminal User Interface) for viewing and managing 
 ## ✨ Features
 
 ### Core Git Features
-- **Three-panel UI**: File tree, diff viewer, and git status
+- **Modern Tabbed UI**: Separate tabs for Unstaged/Staged changes with easy switching (`1`/`2` keys)
+- **Spacious Commit Editor**: Large commit message (6 lines) and body (10 lines) text areas for detailed commits
 - **Hunk-based staging**: Stage, unstage, or discard individual hunks
 - **Branch management**: View, switch between branches
 - **Commit history**: Browse commit history with details
@@ -44,9 +47,12 @@ A powerful Textual-based TUI (Terminal User Interface) for viewing and managing 
 
 ### 🤖 AI-Powered Commits with GAC
 - **AI-generated commit messages**: Press `g` to generate a suggested commit message (no auto-commit)
-- **Multiple AI providers**: OpenAI, Anthropic, Cerebras, Groq, Ollama support
+- **21+ AI providers**: Anthropic, Cerebras, Chutes, Claude-Code, Custom-Anthropic, Custom-OpenAI, DeepSeek, Fireworks, Gemini, Groq, LM-Studio, MiniMax, Mistral, Ollama, OpenAI, OpenRouter, StreamLake, Synthetic, Together, Zai, Zai-Coding, and more!
+- **Dynamic provider discovery**: Automatically detects all available GAC providers
+- **Optional dependency**: Works great without GAC; install separately for AI features
 - **Smart configuration**: Easy setup through built-in modal (Ctrl+G)
 - **Context-aware**: Generates messages based on your actual code changes
+- **Graceful degradation**: App works perfectly even if GAC isn't installed
 
 ## 🎨 Git Status Colors
 
@@ -86,16 +92,34 @@ uv run python -m tentacle.main [repo_path]
 
 ## 🤖 Setting Up GAC (AI Commits)
 
+### Installation
+
+GAC is **optional** but highly recommended for AI-powered commit messages:
+
+```bash
+# Install GAC with UV
+uv pip install 'gac>=0.18.0'
+```
+
+### Configuration
+
 1. **Open Tentacle** in your git repository
 2. **Press `Ctrl+G`** to open GAC configuration
-3. **Choose your provider**:
+3. **Choose your provider** from 21+ supported options:
    - **Cerebras**: Qwen3-Coder-480B (recommended for code, 1M free tokens/day)
    - **OpenAI**: GPT-4o, GPT-4o-mini, GPT-3.5-turbo
-   - **Anthropic**: Claude-3.5-Sonnet, Claude-3.5-Haiku
+   - **Anthropic**: Claude-3.5-Sonnet, Claude-3.5-Haiku, Claude-3-Opus
    - **Groq**: Llama-3.3-70B, Mixtral-8x7B (fast & free)
+   - **DeepSeek**: DeepSeek-V3, DeepSeek-Chat (great for code)
+   - **Gemini**: Gemini-2.0-Flash, Gemini-Pro
    - **Ollama**: Local models (llama3.2, qwen2.5, etc.)
+   - **OpenRouter**: Access to 100+ models
+   - **Fireworks**: Fast inference on open models
+   - **Together**: Llama, Qwen, and more
+   - **Mistral**: Mistral-Large, Mistral-Small, Codestral
+   - **And more**: Chutes, Claude-Code, Custom-Anthropic, Custom-OpenAI, LM-Studio, MiniMax, StreamLake, Synthetic, Zai, Zai-Coding
 4. **Select a model** from the dropdown
-5. **Paste your API key** directly into the config modal
+5. **Paste your API key** directly into the config modal (or leave blank for local providers like Ollama)
 6. **Click Save**
 
 ### Cerebras: Recommended for GAC
@@ -125,10 +149,15 @@ uv run tentacle
 
 ## 📦 Dependencies
 
+### Required
 - **textual>=6.1.0** - Modern TUI framework
 - **GitPython>=3.1.42** - Git repository operations
 
+### Optional
 - **gac>=0.18.0** - AI-powered commit message generation
+  - Install with: `uv pip install 'gac>=0.18.0'`
+  - Enables AI commit message generation with 21+ provider options
+  - Tentacle works perfectly without it!
 
 ## 🎯 Workflow Example
 
@@ -138,13 +167,6 @@ uv run tentacle
 4. **Stage hunks** by clicking "Stage" buttons
 5. **Press `g`** for AI-generated commit message
 6. **Boom!** 🎉 Professional commit message is generated and filled in—review/edit, then press Commit
-
-## 🏢 Walmart Integration
-
-This project is configured for **Walmart Global Tech** with:
-- Walmart internal PyPI index support
-- Corporate proxy configuration
-- WCAG 2.2 Level AA compliance for accessibility
 
 ## 🔮 What Makes This Special
 
