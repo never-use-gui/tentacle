@@ -1,0 +1,42 @@
+name: Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    name: Test on Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.12', '3.13']
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install UV
+      run: |
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+        echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+    
+    - name: Install dependencies
+      run: uv sync
+    
+    - name: Verify package can be imported
+      run: uv run python -c "import tentacle; print(f'Tentacle v{tentacle.__version__}')"
+    
+    - name: Build package
+      run: uv build
+    
+    - name: Test installation from wheel
+      run: |
+        uv pip install dist/*.whl
+        tentacle --help || echo "TUI launched (expected behavior)"

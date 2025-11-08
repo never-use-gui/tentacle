@@ -1,4 +1,5 @@
-# Tentacle 🐙
+
+# octotui 
 
 A powerful Textual-based TUI (Terminal User Interface) for viewing and managing git diffs with **AI-powered commit message generation** using GAC (Git Auto Commit).
 
@@ -65,11 +66,11 @@ A powerful Textual-based TUI (Terminal User Interface) for viewing and managing 
 ## 🚀 Usage
 
 ```bash
-# Run Tentacle with UV (recommended)
-uv run tentacle [repo_path]
+# Run octotui with UV (recommended)
+uv run octotui [repo_path]
 
 # Or run directly with Python module syntax
-uv run python -m tentacle.main [repo_path]
+uv run python -m octotui.main [repo_path]
 ```
 
 ## ⌨️ Controls
@@ -103,7 +104,7 @@ uv pip install 'gac>=0.18.0'
 
 ### Configuration
 
-1. **Open Tentacle** in your git repository
+1. **Open octotui** in your git repository
 2. **Press `Ctrl+G`** to open GAC configuration
 3. **Choose your provider** from 21+ supported options:
    - **Cerebras**: Qwen3-Coder-480B (recommended for code, 1M free tokens/day)
@@ -133,19 +134,40 @@ Cerebras' Qwen3-Coder-480B model is well-suited for commit message generation:
 
 ## 🔧 Installation
 
-This project uses **UV** for Python environment management and **Walmart's internal PyPI**.
+### Option 1: Install from PyPI (Recommended)
+
+```bash
+# Using pip
+pip install octotui
+
+# Using pipx (isolated installation)
+pipx install octotui
+
+# Using uv (fastest)
+uv pip install octotui
+
+# Run it!
+octotui
+```
+
+### Option 2: Install from Source (Development)
 
 ```bash
 # Clone the repository
-git clone <tentacle-repo>
-cd tentacle
+git clone https://github.com/never-use-gui/octotui.git
+cd octotui
 
 # Install with UV
 uv sync
 
 # Run the application
-uv run tentacle
+uv run octotui
 ```
+
+### System Requirements
+
+- Python 3.11 or higher
+- Git (for repository operations)
 
 ## 📦 Dependencies
 
@@ -157,11 +179,11 @@ uv run tentacle
 - **gac>=0.18.0** - AI-powered commit message generation
   - Install with: `uv pip install 'gac>=0.18.0'`
   - Enables AI commit message generation with 21+ provider options
-  - Tentacle works perfectly without it!
+  - octotui works perfectly without it!
 
 ## 🎯 Workflow Example
 
-1. **Open Tentacle**: `uv run tentacle`
+1. **Open octotui**: `uv run octotui`
 2. **Make some changes** to your code
 3. **Review diffs** in the center panel
 4. **Stage hunks** by clicking "Stage" buttons
@@ -170,7 +192,7 @@ uv run tentacle
 
 ## 🔮 What Makes This Special
 
-Tentacle combines the power of a visual git interface with AI-powered commit messages, making it perfect for:
+octotui combines the power of a visual git interface with AI-powered commit messages, making it perfect for:
 
 - **Code reviews**: Visual diff inspection with hunk-level control
 - **Professional commits**: AI generates conventional commit messages

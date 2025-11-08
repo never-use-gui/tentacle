@@ -1,14 +1,14 @@
-# Tentacle Project Structure
+# octotui Project Structure
 
 ## Overview
 
-Tentacle is a Textual-based TUI (Terminal User Interface) application for viewing and managing git diffs. It provides a split-screen interface for browsing files, viewing diffs, and managing git operations.
+octotui is a Textual-based TUI (Terminal User Interface) application for viewing and managing git diffs. It provides a split-screen interface for browsing files, viewing diffs, and managing git operations.
 
 ## File Structure
 
 ```
 /project-root
-├── tentacle/
+├── octotui/
 │   ├── __init__.py
 │   ├── main.py
 │   ├── git_diff_viewer.py
@@ -22,14 +22,14 @@ Tentacle is a Textual-based TUI (Terminal User Interface) application for viewin
 
 ## Roles and Responsibilities
 
-### `tentacle/main.py`
+### `octotui/main.py`
 - **Role**: Application entry point
 - **Responsibilities**:
   - Handle command-line arguments
   - Initialize and run the main Textual application
   - Provide the executable script entry point
 
-### `tentacle/git_diff_viewer.py`
+### `octotui/git_diff_viewer.py`
 - **Role**: Main Textual application class
 - **Responsibilities**:
   - Create and manage the three-panel UI layout (file tree, diff view, commit history)
@@ -40,7 +40,7 @@ Tentacle is a Textual-based TUI (Terminal User Interface) application for viewin
   - Populate commit history panel
   - Handle application bindings (quit, dark mode toggle, commit)
 
-### `tentacle/git_status_sidebar.py`
+### `octotui/git_status_sidebar.py`
 - **Role**: Git repository interaction and data management
 - **Responsibilities**:
   - Interface with GitPython to perform git operations
@@ -50,7 +50,7 @@ Tentacle is a Textual-based TUI (Terminal User Interface) application for viewin
   - Retrieve commit history
   - Handle commit operations
 
-### `tentacle/style.tcss`
+### `octotui/style.tcss`
 - **Role**: CSS styling for the Textual application
 - **Responsibilities**:
   - Define colors and styles for the application
@@ -58,7 +58,7 @@ Tentacle is a Textual-based TUI (Terminal User Interface) application for viewin
   - Define styling for different git status indicators
   - Define styling for diff hunks (added, removed, unchanged lines)
 
-### `tentacle/smmono9.tlf`
+### `octotui/smmono9.tlf`
 - **Role**: Custom monospace font for ASCII art rendering
 - **Responsibilities**:
   - Provide a consistent, clean monospace font for the animated logo
@@ -83,13 +83,13 @@ Tentacle is a Textual-based TUI (Terminal User Interface) application for viewin
 The project uses UV for Python environment management and should always be run with:
 
 ```bash
-uv run python -m tentacle.main
+uv run python -m octotui.main
 ```
 
 Or if installed as a package:
 
 ```bash
-uv run tentacle [repo_path]
+uv run octotui [repo_path]
 ```
 
 This ensures that the application runs with the correct Python version and dependencies as managed by UV.

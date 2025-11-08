@@ -1,0 +1,6 @@
+include README.md
+include LICENSE
+include pyproject.toml
+recursive-include tentacle *.tcss
+recursive-include tentacle *.tlf
+recursive-include tentacle *.py
