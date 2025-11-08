@@ -164,7 +164,7 @@ MIT License - see [LICENSE](LICENSE) for details
 ## 🙏 Acknowledgments
 
 - Built with ❤️ using [Textual](https://textual.textualize.io/)
-- AI commits powered by [GAC](https://github.com/cellweb/gac)
+- AI commits powered by [GAC](https://github.com/cellwebb/gac)
 
 ## 💬 Community
 
