@@ -12,8 +12,8 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
 **A Textual TUI For GitKraken Lovers** 
-
-[Features](#-features) • [Installation](#-installation) • [Quick Start](#-quick-start) • [AI Commits](#-ai-powered-commits) • [Keybindings](#️-keybindings)
+ 
+[Installation](#-installation) • [AI Commits](#-ai-powered-commits) • [Keybindings](#️-keybindings)
 
 </div>
 
