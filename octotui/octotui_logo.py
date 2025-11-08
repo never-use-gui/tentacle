@@ -8,11 +8,11 @@ from textual.widget import Widget
 from textual.widgets import Static
 
 
-class AnimatedLogo(Widget):
-    """Big, stylish octotui logo using pyfiglet with the emboss font."""
+class OctotuiLogo(Widget):
+    """Big, stylish Octotui logo using pyfiglet with the pagga font."""
 
     DEFAULT_CSS = """
-    AnimatedLogo {
+    OctotuiLogo {
         height: auto;
         width: 1fr;
         content-align: center middle;
@@ -20,7 +20,7 @@ class AnimatedLogo(Widget):
         align: center middle;
     }
 
-    AnimatedLogo .logo-text {
+    OctotuiLogo .logo-text {
         text-style: bold;
         color: #bb9af7;
         text-align: center;
@@ -29,7 +29,7 @@ class AnimatedLogo(Widget):
     """
 
     LOGO_TEXT: ClassVar[str] = "OCTOTUI"
-    FONT_NAME: ClassVar[str] = "emboss"
+    FONT_NAME: ClassVar[str] = "pagga"
 
     def compose(self) -> ComposeResult:
         """Create a stylish FIGlet logo using the pagga font."""

@@ -1,5 +1,4 @@
 
-
 /* GitDiffViewer CSS - GitKraken-like Design */
 
 Screen {
@@ -82,6 +81,8 @@ Header {
     margin: 0 0 1 0;
 }
 
+
+
 #unstaged-tree, #staged-tree {
     height: 1fr;
     background: transparent;
@@ -113,6 +114,8 @@ Header {
     height: 1fr;
     overflow-y: auto;
 }
+
+
 
 .commit-input {
     width: 100%;
@@ -266,6 +269,8 @@ Header {
     layout: vertical;
     overflow-y: auto;
 }
+
+
 
 /* Hunk styling */
 .hunk-container {
@@ -424,4 +429,3 @@ Tree > .tree--node {
     padding: 0 1;
     background: transparent;
 }
-/* octotui styles: copied from original Tentacle style to keep behavior consistent */

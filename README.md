@@ -1,206 +1,180 @@
+<div align="center">
 
-# octotui 
+<img src="cute-octo.png" alt="OctoTUI Logo" width="300">
 
-A powerful Textual-based TUI (Terminal User Interface) for viewing and managing git diffs with **AI-powered commit message generation** using GAC (Git Auto Commit).
+# 🐙 OctoTUI
 
-## ⌨️ Keybindings
 
-### 📁 File Navigation
-- `↑/↓` - Navigate through files and hunks
-- `Enter` - Select file to view diff
-- `Tab` - Navigate through UI elements (use `Shift+Tab` to go backwards)
-- `1` or `Ctrl+1` - Switch to **Unstaged Changes** tab
-- `2` or `Ctrl+2` - Switch to **Staged Changes** tab
+[![PyPI version](https://img.shields.io/pypi/v/octotui.svg)](https://pypi.org/project/octotui/)
+[![Python](https://img.shields.io/pypi/pyversions/octotui.svg)](https://pypi.org/project/octotui/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
-### 🔄 Git Operations
-- `s` - Stage selected file
-- `u` - Unstage selected file
-- `a` - **Stage ALL unstaged changes**
-- `x` - **Unstage ALL staged changes**
-- `c` - Commit staged changes
+**A Textual TUI For GitKraken Lovers** 
 
-### 🌿 Branch Management
-- `b` - Show branch switcher
-- `r` - Refresh branches
+[Features](#-features) • [Installation](#-installation) • [Quick Start](#-quick-start) • [AI Commits](#-ai-powered-commits) • [Keybindings](#️-keybindings)
 
-### 📡 Remote Operations
-- `p` - Push current branch
-- `o` - Pull latest changes
+</div>
 
-### 🤖 AI Integration (GAC)
-- `Ctrl+G` - **Configure GAC** (Git Commit Assistant)
-- `g` - **Generate commit message with AI**
+---
 
-### ⚙️ Application
-- `h` - **Show help modal** with all keybindings
-- `r` - Refresh git status and file tree
-- `q` - Quit application
+## 🚀 OctoTUI
 
-## ✨ Features
+> **We love GitKraken so much, we wanted to bring that beautiful experience to the terminal!**
 
-### Core Git Features
-- **Modern Tabbed UI**: Separate tabs for Unstaged/Staged changes with easy switching (`1`/`2` keys)
-- **Spacious Commit Editor**: Large commit message (6 lines) and body (10 lines) text areas for detailed commits
-- **Hunk-based staging**: Stage, unstage, or discard individual hunks
-- **Branch management**: View, switch between branches
-- **Commit history**: Browse commit history with details
-- **Real-time git status**: Color-coded file status indicators
+GitKraken is amazing - it's gorgeous, intuitive, and makes Git feel approachable. But as terminal enthusiasts, we found ourselves constantly context-switching between our editor and GitKraken. We wanted that same delightful experience without ever leaving the command line.
 
-### 🤖 AI-Powered Commits with GAC
-- **AI-generated commit messages**: Press `g` to generate a suggested commit message (no auto-commit)
-- **21+ AI providers**: Anthropic, Cerebras, Chutes, Claude-Code, Custom-Anthropic, Custom-OpenAI, DeepSeek, Fireworks, Gemini, Groq, LM-Studio, MiniMax, Mistral, Ollama, OpenAI, OpenRouter, StreamLake, Synthetic, Together, Zai, Zai-Coding, and more!
-- **Dynamic provider discovery**: Automatically detects all available GAC providers
-- **Optional dependency**: Works great without GAC; install separately for AI features
-- **Smart configuration**: Easy setup through built-in modal (Ctrl+G)
-- **Context-aware**: Generates messages based on your actual code changes
-- **Graceful degradation**: App works perfectly even if GAC isn't installed
+**OctoTUI is our love letter to both GitKraken and the terminal.**
 
-## 🎨 Git Status Colors
+### 💙 What We Kept from GitKraken
+- ✅ Beautiful, intuitive visual diffs
+- ✅ Hunk-level staging control
+- ✅ Branch visualization and management
+- ✅ Commit history browsing
 
-- **🟢 Green**: Staged files (ready to commit)
-- **🟡 Yellow**: Modified files (unstaged changes)
-- **🔵 Blue**: Directories
-- **🟣 Purple**: Untracked files
-- **🔴 Red**: Deleted files
+### 🎯 What We Added for Terminal Lovers
+- 🤖 AI-powered commit messages (via GAC)
+- 🆓 100% free and open source
+- 🏠 Never leave your terminal flow
 
-## 🚀 Usage
+## 📦 Installation
+
+### Quick Start (Recommended)
 
 ```bash
-# Run octotui with UV (recommended)
-uv run octotui [repo_path]
-
-# Or run directly with Python module syntax
-uv run python -m octotui.main [repo_path]
+# Using uvx (isolated, recommended)
+uvx octotui
 ```
 
-## ⌨️ Controls
-
-### Basic Navigation
-- `q` - Quit the application
-- `Ctrl+d` - Toggle dark mode
-- `r` - Refresh branches
-- `b` - Switch branch
-
-### Git Operations
-- `c` - Commit staged changes (manual message)
-- `g` - **GAC Generate Message** (AI-suggested commit message, no auto-commit)
-- `Ctrl+G` - **Configure GAC** settings
-
-### File Operations
-- Click files to view diffs
-- Use hunk buttons to stage/unstage/discard changes
-- Stage entire files or individual hunks
-
-## 🤖 Setting Up GAC (AI Commits)
-
-### Installation
-
-GAC is **optional** but highly recommended for AI-powered commit messages:
+### From Source (For Contributors)
 
 ```bash
-# Install GAC with UV
-uv pip install 'gac>=0.18.0'
-```
-
-### Configuration
-
-1. **Open octotui** in your git repository
-2. **Press `Ctrl+G`** to open GAC configuration
-3. **Choose your provider** from 21+ supported options:
-   - **Cerebras**: Qwen3-Coder-480B (recommended for code, 1M free tokens/day)
-   - **OpenAI**: GPT-4o, GPT-4o-mini, GPT-3.5-turbo
-   - **Anthropic**: Claude-3.5-Sonnet, Claude-3.5-Haiku, Claude-3-Opus
-   - **Groq**: Llama-3.3-70B, Mixtral-8x7B (fast & free)
-   - **DeepSeek**: DeepSeek-V3, DeepSeek-Chat (great for code)
-   - **Gemini**: Gemini-2.0-Flash, Gemini-Pro
-   - **Ollama**: Local models (llama3.2, qwen2.5, etc.)
-   - **OpenRouter**: Access to 100+ models
-   - **Fireworks**: Fast inference on open models
-   - **Together**: Llama, Qwen, and more
-   - **Mistral**: Mistral-Large, Mistral-Small, Codestral
-   - **And more**: Chutes, Claude-Code, Custom-Anthropic, Custom-OpenAI, LM-Studio, MiniMax, StreamLake, Synthetic, Zai, Zai-Coding
-4. **Select a model** from the dropdown
-5. **Paste your API key** directly into the config modal (or leave blank for local providers like Ollama)
-6. **Click Save**
-
-### Cerebras: Recommended for GAC
-
-Cerebras' Qwen3-Coder-480B model is well-suited for commit message generation:
-
-- Free tier with 1 million tokens per day (no credit card required)
-- Optimized specifically for code-related tasks
-- Fast response times
-- Get your API key: https://cloud.cerebras.ai/
-
-## 🔧 Installation
-
-### Option 1: Install from PyPI (Recommended)
-
-```bash
-# Using pip
-pip install octotui
-
-# Using pipx (isolated installation)
-pipx install octotui
-
-# Using uv (fastest)
-uv pip install octotui
-
-# Run it!
-octotui
-```
-
-### Option 2: Install from Source (Development)
-
-```bash
-# Clone the repository
 git clone https://github.com/never-use-gui/octotui.git
 cd octotui
-
-# Install with UV
-uv sync
-
-# Run the application
 uv run octotui
 ```
 
 ### System Requirements
 
-- Python 3.11 or higher
-- Git (for repository operations)
+- 🐍 Python 3.11+
+- 🔧 Git
+- 💻 Any terminal with 256+ colors
 
-## 📦 Dependencies
 
-### Required
-- **textual>=6.1.0** - Modern TUI framework
-- **GitPython>=3.1.42** - Git repository operations
+### First-Time Workflow
 
-### Optional
-- **gac>=0.18.0** - AI-powered commit message generation
-  - Install with: `uv pip install 'gac>=0.18.0'`
-  - Enables AI commit message generation with 21+ provider options
-  - octotui works perfectly without it!
+1. **Review Changes**: See your diffs in beautiful color
+2. **Stage Hunks**: Click or use `s` to stage individual changes
+3. **Generate Commit**: Press `g` for AI-powered message (optional)
+4. **Commit**: Press `c` to commit with your message
+5. **Push**: Press `p` to push to remote
 
-## 🎯 Workflow Example
+**Pro tip**: Press `h` anytime to see all available keybindings! 🚀
 
-1. **Open octotui**: `uv run octotui`
-2. **Make some changes** to your code
-3. **Review diffs** in the center panel
-4. **Stage hunks** by clicking "Stage" buttons
-5. **Press `g`** for AI-generated commit message
-6. **Boom!** 🎉 Professional commit message is generated and filled in—review/edit, then press Commit
+## 🤖 AI-Powered Commits
 
-## 🔮 What Makes This Special
+### Setup (Optional but Awesome)
 
-octotui combines the power of a visual git interface with AI-powered commit messages, making it perfect for:
+```bash
+# Install GAC (Git Auto Commit)
+uv pip install 'gac>=0.18.0'
+```
 
-- **Code reviews**: Visual diff inspection with hunk-level control
-- **Professional commits**: AI generates conventional commit messages
-- **Fast workflow**: Stage, review, and commit without leaving the terminal
-- **Team consistency**: Standardized commit message formats
+### Configuration
 
+1. Press `Ctrl+G` in OctoTUI
+2. Choose your provider (we recommend **Cerebras** for free tier)
+3. Select your model
+4. Paste your API key
+5. Save & enjoy AI commit messages!
+
+## ⌨️ Keybindings
+
+### 📁 Navigation
+| Key | Action |
+|-----|--------|
+| `↑/↓` | Navigate files/hunks |
+| `Enter` | Select file |
+| `Tab` / `Shift+Tab` | Cycle through UI elements |
+| `1` / `Ctrl+1` | Switch to Unstaged tab |
+| `2` / `Ctrl+2` | Switch to Staged tab |
+
+### 🔄 Git Operations
+| Key | Action |
+|-----|--------|
+| `s` | Stage selected file |
+| `u` | Unstage selected file |
+| `a` | Stage ALL unstaged changes |
+| `x` | Unstage ALL staged changes |
+| `c` | Commit staged changes |
+
+### 🌿 Branch & Remote
+| Key | Action |
+|-----|--------|
+| `b` | Switch branch |
+| `r` | Refresh status |
+| `p` | Push to remote |
+| `o` | Pull from remote |
+
+### 🤖 AI Features
+| Key | Action |
+|-----|--------|
+| `g` | Generate AI commit message |
+| `Ctrl+G` | Configure GAC settings |
+
+### ⚙️ Application
+| Key | Action |
+|-----|--------|
+| `h` | Show help modal |
+| `q` | Quit application |
+| `Ctrl+D` | Toggle dark mode |
+
+## 🎨 Git Status Colors
+
+| Color | Meaning |
+|-------|----------|
+| 🟢 **Green** | Staged files (ready to commit) |
+| 🟡 **Yellow** | Modified files (unstaged) |
+| 🔵 **Blue** | Directories |
+| 🟣 **Purple** | Untracked files |
+| 🔴 **Red** | Deleted files |
+
+### Code Quality Standards
+
+- ✅ Follow the Zen of Python
+- ✅ DRY (Don't Repeat Yourself)
+- ✅ YAGNI (You Aren't Gonna Need It)
+- ✅ SOLID principles
+- ✅ Keep files under 600 lines
+- ✅ Write tests for new features
+- ✅ Pass `ruff check` with zero errors
+
+## 📚 Tech Stack
+
+- **[Textual](https://textual.textualize.io/)**: Modern TUI framework
+- **[GitPython](https://gitpython.readthedocs.io/)**: Git operations
+- **[GAC](https://github.com/Dicklesworthstone/gac)**: AI commit generation
+- **[Ruff](https://github.com/astral-sh/ruff)**: Lightning-fast Python linter
+
+## 📜 License
+
+MIT License - see [LICENSE](LICENSE) for details
+
+## 🙏 Acknowledgments
+
+- Built with ❤️ using [Textual](https://textual.textualize.io/)
+- AI commits powered by [GAC](https://github.com/cellweb/gac)
+
+## 💬 Community
+
+- 🐛 **Issues**: [GitHub Issues](https://github.com/never-use-gui/octotui/issues)
 ---
 
-**Built with ❤️*
+<div align="center">
 
-*"Because managing git shouldn't require a kraken!"* 🐙
+### 🌟 If you like OctoTUI, give us a star! 🌟
+
+[⬆ Back to Top](#-octotui)
+
+</div>

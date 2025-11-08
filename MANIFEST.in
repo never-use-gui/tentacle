@@ -1,6 +1,6 @@
 include README.md
 include LICENSE
 include pyproject.toml
-recursive-include tentacle *.tcss
-recursive-include tentacle *.tlf
-recursive-include tentacle *.py
+recursive-include octotui *.tcss
+recursive-include octotui *.tlf
+recursive-include octotui *.py

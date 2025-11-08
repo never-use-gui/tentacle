@@ -110,13 +110,15 @@ class DiffMarkdown(Markdown):
 
     def _build_markdown(self, hunks: List[Hunk]) -> str:
         """Construct the Markdown payload that encodes diff and syntax info."""
-        header_lines: List[str] = ["<!-- octotui DiffMarkdown -->"]
+        header_lines: List[str] = ["<!-- Octotui DiffMarkdown -->"]
 
         if not hunks:
             return "\n".join(header_lines + ["_No changes to display._"])
 
         language = self._detect_language()
-        fence_language = "diff" if self._config.prefer_diff_language else language or "diff"
+        fence_language = (
+            "diff" if self._config.prefer_diff_language else language or "diff"
+        )
 
         for hunk in hunks:
             if self._config.show_headers:

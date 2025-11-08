@@ -31,7 +31,7 @@ jobs:
       run: uv sync
     
     - name: Verify package can be imported
-      run: uv run python -c "import tentacle; print(f'Tentacle v{tentacle.__version__}')"
+      run: uv run python -c "import octotui; print(f'octotui v{octotui.__version__}')"
     
     - name: Build package
       run: uv build
@@ -39,4 +39,4 @@ jobs:
     - name: Test installation from wheel
       run: |
         uv pip install dist/*.whl
-        tentacle --help || echo "TUI launched (expected behavior)"
+        octotui --help || echo "TUI launched (expected behavior)"
