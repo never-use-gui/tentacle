@@ -16,11 +16,12 @@ from textual.widgets import (
     TextArea,
 )
 from textual.containers import Horizontal, Vertical, Container, VerticalScroll
-from octotui.git_status_sidebar import GitStatusSidebar, Hunk
-from octotui.octotui_logo import OctotuiLogo
-from octotui.gac_integration import GACIntegration
-from octotui.gac_config_modal import GACConfigModal
-from octotui.diff_markdown import DiffMarkdown, DiffMarkdownConfig
+from textual.widgets.tree import TreeNode
+from tentacle.git_status_sidebar import GitStatusSidebar, Hunk
+from tentacle.animated_logo import AnimatedLogo
+from tentacle.gac_integration import GACIntegration
+from tentacle.gac_config_modal import GACConfigModal
+from tentacle.diff_markdown import DiffMarkdown, DiffMarkdownConfig
 from textual.widget import Widget
 from textual.screen import ModalScreen
 from textual.widgets import OptionList
@@ -48,6 +49,9 @@ class GitDiffHistoryTabs(Widget):
         with TabbedContent():
             with TabPane("Diff View"):
                 yield VerticalScroll(id="diff-content")
+            with TabPane("Commit Graph", id="graph-tab"):
+                # Commit graph will be mounted here dynamically
+                yield Container(id="graph-container")
             with TabPane("Commit History"):
                 yield VerticalScroll(id="history-content")
             with TabPane("Commit Message"):
@@ -336,8 +340,10 @@ class GitDiffViewer(App):
         ("o", "pull_changes", "Pull"),
         ("1", "switch_to_unstaged", "Switch to Unstaged Tab"),
         ("2", "switch_to_staged", "Switch to Staged Tab"),
+        ("3", "switch_to_graph", "Switch to Commit Graph"),
         ("ctrl+1", "switch_to_unstaged", "Switch to Unstaged Tab"),
         ("ctrl+2", "switch_to_staged", "Switch to Staged Tab"),
+        ("ctrl+3", "switch_to_graph", "Switch to Commit Graph"),
     ]
 
     def __init__(self, repo_path: str = None):
@@ -383,7 +389,7 @@ class GitDiffViewer(App):
         self.populate_unstaged_changes()
         self.populate_staged_changes()
         self.populate_commit_history()
-
+        
         # If no files are selected, show a message in the diff panel
         try:
             diff_content = self.query_one("#diff-content", VerticalScroll)
@@ -511,7 +517,7 @@ class GitDiffViewer(App):
         self.populate_staged_changes(file_data)
         self.populate_branch_dropdown()
         self.populate_commit_history()
-
+        
         # Also refresh the diff view if a file is currently selected
         if self.current_file:
             self.display_file_diff(
@@ -675,8 +681,24 @@ class GitDiffViewer(App):
                         # Reset to current branch
                         current_branch = self.git_sidebar.get_current_branch()
                         event.select.value = current_branch
-
-
+            
+    def action_refresh_branches(self) -> None:
+        """Refresh all git status components including file trees and commit history."""
+        # Get fresh data from git
+        file_data = self.git_sidebar.collect_file_data()
+        
+        # Refresh all components
+        self.populate_file_tree()
+        self.populate_unstaged_changes(file_data)
+        self.populate_staged_changes(file_data)
+        self.populate_branch_dropdown()
+        self.populate_commit_history()
+        
+        # Also refresh the diff view if a file is currently selected
+        if self.current_file:
+            self.display_file_diff(self.current_file, self.current_is_staged, force_refresh=True)
+        
+    def populate_file_tree(self) -> None:
         """Populate the file tree sidebar with all files and their git status."""
         if not self.git_sidebar.repo:
             return
@@ -1034,10 +1056,10 @@ class GitDiffViewer(App):
 
         except Exception:
             pass
+            
 
-    def display_file_diff(
-        self, file_path: str, is_staged: bool = False, force_refresh: bool = False
-    ) -> None:
+            
+    def display_file_diff(self, file_path: str, is_staged: bool = False, force_refresh: bool = False) -> None:
         """Display the diff for a selected file in the diff panel with appropriate buttons."""
         # Skip if this is the same file we're already displaying (unless force_refresh is True)
         if (
@@ -1347,6 +1369,19 @@ class GitDiffViewer(App):
             status_tabs.active = "staged-tab"
         except Exception as e:
             self.notify(f"Error switching to staged tab: {e}", severity="error")
+    
+    def action_switch_to_graph(self) -> None:
+        """Switch to the Commit Graph tab."""
+        try:
+            # The graph is in the center panel (GitDiffHistoryTabs), not status-tabs
+            # We need to find the TabbedContent in the center panel
+            tabbed_content = self.query(TabbedContent)
+            for tabs in tabbed_content:
+                if tabs.query_one("#graph-tab", TabPane):
+                    tabs.active = "graph-tab"
+                    break
+        except Exception as e:
+            self.notify(f"Error switching to graph tab: {e}", severity="error")
 
     def action_gac_generate(self) -> None:
         """Generate commit message using GAC and populate the commit message fields (no auto-commit)."""
